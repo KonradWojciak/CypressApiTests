@@ -110,6 +110,41 @@ describe("Test for GET time request duration", () => {
       cy.log("Response duretion is less then 500 ms");
     });
   });
+    
+  // POST  work tests
+  describe("Test for POST method ", () => {
+    it("corect work with POST", () => {
+      // Step 1: send GET request to endpoint
+      cy.request({
+        method: "POST",
+        failOnStatusCode: false,
+        url: "http://localhost:8080/cars",
+        body: {
+          // warto randomizowac te dane
+          "Nazwa elementu": "Stołek",
+          "Szczegól elementu": "Zileony",
+        },
+      }).as("details");
+      cy.log("Request was sent");
+  
+      // Step 2 assert that the  status code is 200
+      cy.get("details").its("status").should("eq", 200);
+  
+      cy.log("Request status is corect");
+  
+      // Step 3: assert that the response body is not empty
+      cy.get("@details").its("body").should("not.be.empty");
+      cy.log("Body is not empty.");
+  
+      // Step 4: assert that the body includes new elements
+      cy.get("@details").then((response) => {
+        cy.wrap(JSON.stringify(response.body))
+          .should("include", "Stołek")
+          .should("include", "Zielony");
+      });
+    });
+  });"
+
   it("correct POST with random data", () => {
     //SET UP
     // Generate random data
@@ -148,8 +183,7 @@ describe("Test for GET time request duration", () => {
 
     cy.log("New elements includ in the response body");
 
-    // Step 5
-  });
+   
 });
 
 // Chceck DELETE tests
