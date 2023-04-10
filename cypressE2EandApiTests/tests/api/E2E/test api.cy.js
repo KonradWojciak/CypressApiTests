@@ -1,4 +1,5 @@
-// Key value Test
+/// Key value Test
+
 describe("Key value Test", () => {
   const request = {
     url: "https://httpbin.org/get",
@@ -24,6 +25,7 @@ describe("Key value Test", () => {
 });
 
 /// GET work   Tests
+
 describe("Test method  GET", () => {
   it("corect work with method  GET", () => {
     // Step 1: send GET request to endpoint
@@ -51,7 +53,7 @@ describe("Test method  GET", () => {
   });
 });
 
-// GET DURETION tests
+/// GET DURETION tests
 
 describe("Test for request duration", () => {
   it("should return request duration", () => {
@@ -110,83 +112,144 @@ describe("Test for GET time request duration", () => {
       cy.log("Response duretion is less then 500 ms");
     });
   });
-    
-  // POST  work tests
-  describe("Test for POST method ", () => {
-    it("corect work with POST", () => {
-      // Step 1: send GET request to endpoint
-      cy.request({
-        method: "POST",
-        failOnStatusCode: false,
-        url: "http://localhost:8080/cars",
-        body: {
-          // warto randomizowac te dane
-          "Nazwa elementu": "Stołek",
-          "Szczegól elementu": "Zileony",
-        },
-      }).as("details");
-      cy.log("Request was sent");
-  
-      // Step 2 assert that the  status code is 200
-      cy.get("details").its("status").should("eq", 200);
-  
-      cy.log("Request status is corect");
-  
-      // Step 3: assert that the response body is not empty
-      cy.get("@details").its("body").should("not.be.empty");
-      cy.log("Body is not empty.");
-  
-      // Step 4: assert that the body includes new elements
-      cy.get("@details").then((response) => {
-        cy.wrap(JSON.stringify(response.body))
-          .should("include", "Stołek")
-          .should("include", "Zielony");
-      });
-    });
-  });"
+});
 
-  it("correct POST with random data", () => {
-    //SET UP
-    // Generate random data
-    const randomName = Math.random().toString(36).substring(7);
-    const randomColor = Math.random().toString(36).substring(7);
+/// POST  work tests
 
-    // Step 1 send POST request to endpoint with random data
+describe("Test for POST method ", () => {
+  it("corect work with POST", () => {
+    // Step 1: send GET request to endpoint
     cy.request({
       method: "POST",
       failOnStatusCode: false,
       url: "http://localhost:8080/cars",
       body: {
-        "Nazwa elementu": randomName,
-        "Szczegół elementu": randomColor,
+        "Nazwa elementu": "Stołek",
+        "Szczegól elementu": "Zileony",
       },
-    }).as("response");
-
+    }).as("details");
     cy.log("Request was sent");
 
-    // Step 2 assert that the status code is 200
-    cy.get("@response").its("status").should("eq", 200);
+    // Step 2 assert that the  status code is 200
+    cy.get("details").its("status").should("eq", 200);
 
-    cy.log("Request status is correct");
+    cy.log("Request status is corect");
 
-    // Step 3 assert that the response body is not empty
-    cy.get("@response").its("body").should("not.be.empty");
+    // Step 3: assert that the response body is not empty
+    cy.get("@details").its("body").should("not.be.empty");
+    cy.log("Body is not empty.");
 
-    cy.log("Response body is not empty");
-
-    // Step 4 assert that the response body includes new elements
-    cy.get("@response").then((response) => {
+    // Step 4: assert that the body includes new elements
+    cy.get("@details").then((response) => {
       cy.wrap(JSON.stringify(response.body))
-        .should("include", randomName)
-        .should("include", randomColor);
+        .should("include", "Stołek")
+        .should("include", "Zielony");
     });
-
-    cy.log("New elements includ in the response body");
-
-   
+  });
 });
 
-// Chceck DELETE tests
+it("correct POST with random data", () => {
+  //SET UP
+  // Generate random data
+  const randomName = Math.random().toString(36).substring(7);
+  const randomColor = Math.random().toString(36).substring(7);
+
+  // Step 1 send POST request to endpoint with random data
+  cy.request({
+    method: "POST",
+    failOnStatusCode: false,
+    url: "http://localhost:8080/cars",
+    body: {
+      "Nazwa elementu": randomName,
+      "Szczegół elementu": randomColor,
+    },
+  }).as("response");
+
+  cy.log("Request was sent");
+
+  // Step 2 assert that the status code is 200
+  cy.get("@response").its("status").should("eq", 200);
+
+  cy.log("Request status is correct");
+
+  // Step 3 assert that the response body is not empty
+  cy.get("@response").its("body").should("not.be.empty");
+
+  cy.log("Response body is not empty");
+
+  // Step 4 assert that the response body includes new elements
+  cy.get("@response").then((response) => {
+    cy.wrap(JSON.stringify(response.body))
+      .should("include", randomName)
+      .should("include", randomColor);
+  });
+
+  cy.log("New elements includ in the response body");
+});
+
+/// check POST method
+
+describe("Test for PUT method ", () => {
+  it("should change the name of an element", () => {
+    // Step 1: send POST request to endpoint to create an element
+    cy.request({
+      method: "POST",
+      failOnStatusCode: false,
+      url: "http://localhost:8080/cars",
+      body: {
+        "Nazwa elementu": "Stołek",
+        "Szczegól elementu": "Zielony",
+      },
+    }).as("response");
+    cy.log("POST request was sent");
+
+    // Step 2: assert that the  status code is 200
+    cy.get("@response").its("status").should("eq", 200);
+
+    cy.log("POST request status is corect");
+
+    // Step 3: assert that the response body is not empty
+    cy.get("@response").its("body").should("not.be.empty");
+    cy.log("POST response body is not empty");
+
+    // Step 4: assert that the body includes new elements
+    cy.get("@response").then((response) => {
+      cy.wrap(JSON.stringify(response.body))
+        .should("include", "Stołek")
+        .should("include", "Zielony");
+    });
+
+    // Step 5: send PUT request to update element
+    cy.get("@response").then((response) => {
+      const elementId = response.body.id;
+      cy.request({
+        method: "PUT",
+        failOnStatusCode: false,
+        url: `http://localhost:8080/cars/${elementId}`,
+        body: {
+          "Nazwa elementu": "Krzesło",
+        },
+      }).as("putResponse");
+      cy.log("PUT request was sent");
+    });
+
+    // Step 6: assert that the status code of PUT request is 200
+    cy.get("@putResponse").its("status").should("eq", 200);
+    cy.log("PUT request status is correct");
+
+    // Step 7: assert that the response body is not empty
+    cy.get("@putResponse").its("body").should("not.be.empty");
+    cy.log("PUT response body is not empty");
+
+    // Step 8: assert that the body includes the updated element name
+    cy.get("@putResponse").then((response) => {
+      cy.wrap(JSON.stringify(response.body)).should("include", "Krzesło");
+      cy.log("PUT request works correct");
+    });
+  });
+});
+
+/// Chceck DELETE tests
 
 describe("Test for DELETE  method ", () => {
   it("corect work with Delete new Body Data ", () => {
