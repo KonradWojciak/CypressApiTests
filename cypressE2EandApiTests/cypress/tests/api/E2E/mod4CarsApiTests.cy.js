@@ -4,7 +4,8 @@ describe("Mod4 Cars Local Api Tests", () => {
   it("Key value Test response code should be 200", () => {
     // Step 1: send GET request to endpoint
     const request = {
-      url: "https://httpbin.org/get",
+      method: "GET",
+      url: "http://localhost:8080/cars",
       qs: {
         key: "value",
       },
@@ -13,11 +14,11 @@ describe("Mod4 Cars Local Api Tests", () => {
     cy.log("Request was sent");
 
     // Step 2: assert that the status code is 200
-    cy.get("@response").its("status").should("eq", 200);
+    cy.get("@details").its("status").should("eq", 200);
     cy.log("Request status is correct");
 
     // Step 3: assert correct key value
-    cy.get("@response").its("body.args.key").should("eq", "value");
+    cy.get("@details").its("body.args.key").should("eq", "value");
     cy.log("Body has correct key value");
   });
 
@@ -27,8 +28,8 @@ describe("Mod4 Cars Local Api Tests", () => {
     // Step 1: send GET request to endpoint
     cy.request({
       method: "GET",
-      failOnStatusCode: false,
       url: "http://localhost:8080/cars",
+      failOnStatusCode: false,
     }).as("details");
 
     cy.log("Request was sent");
@@ -55,32 +56,32 @@ describe("Mod4 Cars Local Api Tests", () => {
     cy.request({
       method: "GET",
       url: "http://localhost:8080/duration",
-    }).as("response");
+    }).as("details");
 
     cy.log("Request was sent");
 
     // Step 2: assert that the status code is 200
-    cy.get("@response").its("status").should("eq", 200);
+    cy.get("@details").its("status").should("eq", 200);
 
     cy.log("Request status is correct");
 
     // Step 3: assert that the response body is not empty
-    cy.get("@response").its("body").should("not.be.empty");
+    cy.get("@details").its("body").should("not.be.empty");
 
     cy.log("Response body is not empty");
 
     // Step 4: assert that the response body has a duration property
-    cy.get("@response").its("body").should("have.property", "duration");
+    cy.get("@details").its("body").should("have.property", "duration");
 
     cy.log("Response body has duration property");
 
     // Step 5: assert that the duration is a number
-    cy.get("@response").its("body.duration").should("be.a", "number");
+    cy.get("@details").its("body.duration").should("be.a", "number");
 
     cy.log("Duration is a number");
   });
   // Step 6: log the duration value
-  cy.get("@response").then((response) => {
+  cy.get("@details").then((response) => {
     const duration = response.body.duration;
     cy.log(`The duration value is ${duration}`);
   });
@@ -112,11 +113,11 @@ describe("Mod4 Cars Local Api Tests", () => {
     // Step 1: send GET request to endpoint
     cy.request({
       method: "POST",
-      failOnStatusCode: false,
       url: "http://localhost:8080/cars",
       body: {
         manufacturer: "Audi",
         model: "A3",
+        failOnStatusCode: false,
       },
     }).as("details");
     cy.log("Request was sent");
@@ -154,17 +155,17 @@ it("correct POST with random data", () => {
       "Nazwa elementu": randomName,
       "Szczegół elementu": randomModel,
     },
-  }).as("response");
+  }).as("details");
 
   cy.log("Request was sent");
 
   // Step 2 assert that the status code is 200
-  cy.get("@response").its("status").should("eq", 200);
+  cy.get("@details").its("status").should("eq", 200);
 
   cy.log("Request status is correct");
 
   // Step 3 assert that the response body is not empty
-  cy.get("@response").its("body").should("not.be.empty");
+  cy.get("@details").its("body").should("not.be.empty");
 
   cy.log("Response body is not empty");
 
@@ -186,12 +187,12 @@ it("Test for POST on wrong endpoint should return 405", () => {
     method: "GET",
     url: "http://localhost:8080/cars",
     failOnStatusCode: false,
-  }).as("response");
+  }).as("details");
 
   cy.log("Request with wrong method was sent");
 
   // Step 2: assert that the status code is 405
-  cy.get("@response").its("status").should("eq", 405);
+  cy.get("@details").its("status").should("eq", 405);
 
   cy.log("Correct status 405 after wrong request");
 });
@@ -260,5 +261,4 @@ cy.then(() => {
 //   const totalDuration = mocha && mocha.getRunner() && mocha.getRunner().stats ? mocha.getRunner().stats.duration : 0;
 //   cy.log(`Total test duration: ${totalDuration} ms`);
 // });
-//});
 //});
