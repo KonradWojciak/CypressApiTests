@@ -1,17 +1,15 @@
-/// Key value Test
 describe("Mod4 Cars Local Api Tests", () => {
-it("Key value Test", () => {
-  const request = {
-    url: "https://httpbin.org/get",
-    qs: {
-      key: "value",
-    },
-    failOnStatusCode: false,
-  };
+  /// Key value Test
 
-  it("response code should be 200", () => {
+  it("Key value Test response code should be 200", () => {
     // Step 1: send GET request to endpoint
-    cy.request(request).as("response");
+    const request = {
+      url: "https://httpbin.org/get",
+      qs: {
+        key: "value",
+      },
+      failOnStatusCode: false,
+    }.as("details");
     cy.log("Request was sent");
 
     // Step 2: assert that the status code is 200
@@ -22,12 +20,10 @@ it("Key value Test", () => {
     cy.get("@response").its("body.args.key").should("eq", "value");
     cy.log("Body has correct key value");
   });
-});
 
-/// GET work   Tests
+  // GET correct work   Tests
 
-describe("Test method  GET", () => {
-  it("corect work with method  GET", () => {
+  it("corect work with method GET", () => {
     // Step 1: send GET request to endpoint
     cy.request({
       method: "GET",
@@ -51,11 +47,9 @@ describe("Test method  GET", () => {
       cy.log("Response was: " + JSON.stringify(response.body));
     });
   });
-});
 
-/// GET DURETION tests
+  // GET DURETION tests
 
-describe("Test for request duration", () => {
   it("should return request duration", () => {
     // Step 1: send GET request to endpoint
     cy.request({
@@ -90,9 +84,8 @@ describe("Test for request duration", () => {
     const duration = response.body.duration;
     cy.log(`The duration value is ${duration}`);
   });
-});
 
-describe("Test for GET time request duration", () => {
+  // maximum duretion Time test
   it("should return response in less than 500ms", () => {
     // Step 1: send GET request to endpoint
     cy.request({
@@ -112,11 +105,9 @@ describe("Test for GET time request duration", () => {
       cy.log("Response duretion is less then 500 ms");
     });
   });
-});
 
-/// POST  work tests
+  /// POST  work tests
 
-describe("Test for POST method ", () => {
   it("corect work with POST", () => {
     // Step 1: send GET request to endpoint
     cy.request({
@@ -150,7 +141,7 @@ describe("Test for POST method ", () => {
 
 it("correct POST with random data", () => {
   //SET UP
-  // Generate random data
+  //Generate random data
   const randomName = Math.random().toString(36).substring(7);
   const randomModel = Math.random().toString(36).substring(7);
 
@@ -187,79 +178,75 @@ it("correct POST with random data", () => {
   cy.log("New elements includ in the response body");
 });
 
-/// Chceck DELETE tests
+/// POST  WRONG END POINT
 
-describe("Test for DELETE  method ", () => {
-  it("corect work with Delete new Body Data ", () => {
-    let id;
+it("Test for POST on wrong endpoint should return 405", () => {
+  // Step 1: send POST request to wrong endpoint
+  cy.request({
+    method: "GET",
+    url: "http://localhost:8080/cars",
+    failOnStatusCode: false,
+  }).as("response");
 
-    //SET-UP
-    // Step 1 send GET request to endpoint
-    cy.request({
-      method: "POST",
-      failOnStatusCode: false,
-      url: "http://localhost:8080/cars",
-      body: {
-        manufacturer: "Citroen",
-        model: "DS5",
-      },
-    }).as("testData");
-    // Step 2 assert that the  status code is 200
-    cy.get("@testData").its("status").should("eq", 200);
-    // Step 3 assert id for new body element
-    cy.get("@testData").then((response) => {
-      const id = response.body.length;
-      cy.log("New element was created with id =" + id);
-      Cypress.env("id", id);
-    });
+  cy.log("Request with wrong method was sent");
 
-    cy.log("Delete Set UP Data created correctly.");
+  // Step 2: assert that the status code is 405
+  cy.get("@response").its("status").should("eq", 405);
+
+  cy.log("Correct status 405 after wrong request");
+});
+
+/// DELETE work tests
+
+it("corect work with DELETE method  with new Body Data ", () => {
+  let id;
+
+  //SET-UP
+  // Step 1 send GET request to endpoint
+  cy.request({
+    method: "POST",
+    failOnStatusCode: false,
+    url: "http://localhost:8080/cars",
+    body: {
+      manufacturer: "Citroen",
+      model: "DS5",
+    },
+  }).as("testData");
+  // Step 2 assert that the  status code is 200
+  cy.get("@testData").its("status").should("eq", 200);
+  // Step 3 assert id for new body element
+  cy.get("@testData").then((response) => {
+    const id = response.body.length;
+    cy.log("New element was created with id =" + id);
+    Cypress.env("id", id);
   });
 
-  // DELATEING
-  // Step 5 assert Id for cypress enviroment
+  cy.log("Delete Set UP Data created correctly.");
+});
 
-  cy.then(() => {
-    const id = Cypress.env("id");
-    // Step 6  send delete request to endpoint
-    cy.request({
-      method: "DELETE",
-      failOnStatusCode: false,
-      url: `http://localhost:8080/cars${id}`,
-    }).as("@details");
-    // Step 7  assert that the status code of delete is 200
-    cy.get("@details").its("status").should("eq", 200);
-    cy.log("Delete request was sent");
+// DELATEING
+// Step 5 assert Id for cypress enviroment
 
-    // Step 8 check for body is not include new element
+cy.then(() => {
+  const id = Cypress.env("id");
+  // Step 6  send delete request to endpoint
+  cy.request({
+    method: "DELETE",
+    failOnStatusCode: false,
+    url: `http://localhost:8080/cars${id}`,
+  }).as("@details");
+  // Step 7  assert that the status code of delete is 200
+  cy.get("@details").its("status").should("eq", 200);
+  cy.log("Delete request was sent");
 
-    cy.get("@details").then((response) => {
-      cy.wrap(JSON.stringify(response.body))
-        .should("not.include", "Citroen")
-        .should("not.include", "DS5");
+  // Step 8 check for body is not include new element
 
-      cy.log("Del Test Data succesfull.");
-    });
-  });
+  cy.get("@details").then((response) => {
+    cy.wrap(JSON.stringify(response.body))
+      .should("not.include", "Citroen")
+      .should("not.include", "DS5");
 
-  /// POST  WRONG END POINT
-
-  describe("Test for POST on wrong endpoint", () => {
-    it("should return 405 for POST method", () => {
-      // Step 1: send POST request to wrong endpoint
-      cy.request({
-        method: "GET",
-        url: "http://localhost:8080/cars",
-        failOnStatusCode: false,
-      }).as("response");
-
-      cy.log("Request with wrong method was sent");
-
-      // Step 2: assert that the status code is 405
-      cy.get("@response").its("status").should("eq", 405);
-
-      cy.log("Correct status 405 after wrong request");
-    });
+    cy.log("Del Test Data succesfull.");
   });
 });
 

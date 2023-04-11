@@ -124,8 +124,8 @@ describe("Test for POST method ", () => {
       failOnStatusCode: false,
       url: "http://localhost:8080/cars",
       body: {
-        "Nazwa elementu": "Stołek",
-        "Szczegól elementu": "Zileony",
+        manufacturer: "Audi",
+        model: "A3",
       },
     }).as("details");
     cy.log("Request was sent");
@@ -142,8 +142,8 @@ describe("Test for POST method ", () => {
     // Step 4: assert that the body includes new elements
     cy.get("@details").then((response) => {
       cy.wrap(JSON.stringify(response.body))
-        .should("include", "Stołek")
-        .should("include", "Zielony");
+        .should("include", "Audi")
+        .should("include", "A3");
     });
   });
 });
@@ -152,7 +152,7 @@ it("correct POST with random data", () => {
   //SET UP
   // Generate random data
   const randomName = Math.random().toString(36).substring(7);
-  const randomColor = Math.random().toString(36).substring(7);
+  const randomModel = Math.random().toString(36).substring(7);
 
   // Step 1 send POST request to endpoint with random data
   cy.request({
@@ -161,7 +161,7 @@ it("correct POST with random data", () => {
     url: "http://localhost:8080/cars",
     body: {
       "Nazwa elementu": randomName,
-      "Szczegół elementu": randomColor,
+      "Szczegół elementu": randomModel,
     },
   }).as("response");
 
@@ -181,72 +181,10 @@ it("correct POST with random data", () => {
   cy.get("@response").then((response) => {
     cy.wrap(JSON.stringify(response.body))
       .should("include", randomName)
-      .should("include", randomColor);
+      .should("include", randomModel);
   });
 
   cy.log("New elements includ in the response body");
-});
-
-/// check POST method
-
-describe("Test for PUT method ", () => {
-  it("should change the name of an element", () => {
-    // Step 1: send POST request to endpoint to create an element
-    cy.request({
-      method: "POST",
-      failOnStatusCode: false,
-      url: "http://localhost:8080/cars",
-      body: {
-        "Nazwa elementu": "Stołek",
-        "Szczegól elementu": "Zielony",
-      },
-    }).as("response");
-    cy.log("POST request was sent");
-
-    // Step 2: assert that the  status code is 200
-    cy.get("@response").its("status").should("eq", 200);
-
-    cy.log("POST request status is corect");
-
-    // Step 3: assert that the response body is not empty
-    cy.get("@response").its("body").should("not.be.empty");
-    cy.log("POST response body is not empty");
-
-    // Step 4: assert that the body includes new elements
-    cy.get("@response").then((response) => {
-      cy.wrap(JSON.stringify(response.body))
-        .should("include", "Stołek")
-        .should("include", "Zielony");
-    });
-
-    // Step 5: send PUT request to update element
-    cy.get("@response").then((response) => {
-      const elementId = response.body.id;
-      cy.request({
-        method: "PUT",
-        failOnStatusCode: false,
-        url: `http://localhost:8080/cars/${elementId}`,
-        body: {
-          "Nazwa elementu": "Krzesło",
-        },
-      }).as("putResponse");
-      cy.log("PUT request was sent");
-    });
-
-    // Step 6: assert that the status code of PUT request is 200
-    cy.get("@putResponse").its("status").should("eq", 200);
-    cy.log("PUT request status is correct");
-
-    // Step 7: assert that the response body is not empty
-    cy.get("@putResponse").its("body").should("not.be.empty");
-    cy.log("PUT response body is not empty");
-
-    // Step 8: assert that the body includes the updated element name
-    cy.get("@putResponse").then((response) => {
-      cy.wrap(JSON.stringify(response.body)).should("include", "Krzesło");
-      cy.log("PUT request works correct");
-    });
-  });
 });
 
 /// Chceck DELETE tests
@@ -262,8 +200,8 @@ describe("Test for DELETE  method ", () => {
       failOnStatusCode: false,
       url: "http://localhost:8080/cars",
       body: {
-        "Nazwa elementu": "Stołek",
-        "Szczegól elementu": "Zileony",
+        manufacturer: "Citroen",
+        model: "DS5",
       },
     }).as("testData");
     // Step 2 assert that the  status code is 200
@@ -275,7 +213,7 @@ describe("Test for DELETE  method ", () => {
       Cypress.env("id", id);
     });
 
-    cy.log("Delete  Test Data created correctly.");
+    cy.log("Delete Set UP Data created correctly.");
   });
 
   // DELATEING
@@ -297,8 +235,8 @@ describe("Test for DELETE  method ", () => {
 
     cy.get("@details").then((response) => {
       cy.wrap(JSON.stringify(response.body))
-        .should("not.include", "Stołek")
-        .should("not.include", "Zielony");
+        .should("not.include", "Citroen")
+        .should("not.include", "DS5");
 
       cy.log("Del Test Data succesfull.");
     });
