@@ -1,3 +1,5 @@
+/// <reference types="cypress"/>
+
 describe("Mod4 Cars Local Api Tests", () => {
   /// Key value Test
 
@@ -24,7 +26,7 @@ describe("Mod4 Cars Local Api Tests", () => {
 
   // GET correct work   Tests
 
-  it("corect work with method GET", () => {
+  it("correct work with method GET", () => {
     // Step 1: send GET request to endpoint
     cy.request({
       method: "GET",
@@ -215,6 +217,7 @@ it("corect work with DELETE method  with new Body Data ", () => {
   }).as("testData");
   // Step 2 assert that the  status code is 200
   cy.get("@testData").its("status").should("eq", 200);
+
   // Step 3 assert id for new body element
   cy.get("@testData").then((response) => {
     const id = response.body.length;
