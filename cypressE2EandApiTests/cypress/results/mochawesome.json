@@ -1,0 +1,109 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 1,
+    "passes": 0,
+    "pending": 0,
+    "failures": 1,
+    "start": "2023-04-12T19:02:59.601Z",
+    "end": "2023-04-12T19:03:02.829Z",
+    "duration": 3228,
+    "testsRegistered": 1,
+    "passPercent": 0,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "535c9cc1-6c4d-4554-baa3-0a080e8a3a05",
+      "title": "",
+      "fullFile": "cypress\\tests\\e2e\\test\\test2.cy.js",
+      "file": "cypress\\tests\\e2e\\test\\test2.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "129aa2e4-17f3-400f-9ea2-068dadcd615f",
+          "title": "Test z wizytą w siedzibie LMS 2",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "To log out",
+              "fullTitle": "Test z wizytą w siedzibie LMS 2 To log out",
+              "timedOut": null,
+              "duration": 2502,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.get(\".css-1jphuq5\").click();\ncy.get(\".css-7afvtf\").click();\ncy.get(\":nth-child(9) > .css-bve2vl\").click();",
+              "err": {
+                "message": "TypeError: cy.login is not a function\n\nBecause this error occurred during a `before each` hook we are skipping the remaining tests in the current suite: `Test z wizytą w siedzibie L...`",
+                "estack": "TypeError: cy.login is not a function\n\nBecause this error occurred during a `before each` hook we are skipping the remaining tests in the current suite: `Test z wizytą w siedzibie L...`\n    at Context.eval (webpack:///./cypress/tests/e2e/test/test2.cy.js:6:7)",
+                "diff": null
+              },
+              "uuid": "ae67c718-ce85-4a83-b5e9-a1a20935bac6",
+              "parentUUID": "129aa2e4-17f3-400f-9ea2-068dadcd615f",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [],
+          "failures": [
+            "ae67c718-ce85-4a83-b5e9-a1a20935bac6"
+          ],
+          "pending": [],
+          "skipped": [],
+          "duration": 2502,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": true,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/results",
+        "overwrite": true,
+        "html": true,
+        "json": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}
