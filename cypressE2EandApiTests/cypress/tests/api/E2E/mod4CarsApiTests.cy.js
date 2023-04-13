@@ -2,8 +2,7 @@
 
 describe("Mod4 Cars Local Api Tests", () => {
   /// Key value Test
-
-  it.only("Key value Test response code should be 200", () => {
+  it("Key value Test response code should be 200", () => {
     // Step 1: send GET request to endpoint
     cy.request({
       failOnStatusCode: false,
@@ -57,7 +56,7 @@ describe("Mod4 Cars Local Api Tests", () => {
     // Step 1: send GET request to endpoint
     cy.request({
       method: "GET",
-      url: "http://localhost:8080/duration",
+      url: "http://localhost:8080/cars",
     }).as("details");
 
     cy.log("Request was sent");
@@ -88,8 +87,8 @@ describe("Mod4 Cars Local Api Tests", () => {
       cy.log(`The duration value is ${duration}`);
     });
 
-    // maximum duretion Time test
-    it("should return response in less than 500ms", () => {
+    // maximum long duretion Time test
+    it("should return response in less than 5000ms", () => {
       // Step 1: send GET request to endpoint
       cy.request({
         method: "GET",
@@ -111,7 +110,7 @@ describe("Mod4 Cars Local Api Tests", () => {
 
     /// POST  work tests
 
-    it("corect work with POST", () => {
+    it("correct work with POST", () => {
       // Step 1: send GET request to endpoint
       cy.request({
         method: "POST",
@@ -119,7 +118,6 @@ describe("Mod4 Cars Local Api Tests", () => {
         body: {
           manufacturer: "Audi",
           model: "A3",
-          failOnStatusCode: false,
         },
       }).as("details");
       cy.log("Request was sent");
@@ -209,8 +207,8 @@ describe("Mod4 Cars Local Api Tests", () => {
       method: "POST",
       url: "http://localhost:8080/cars",
       body: {
-        manufacturer: "Citroen",
-        model: "DS5",
+        manufacturer: "Volvo",
+        model: "XC60",
       },
       failOnStatusCode: false,
     }).as("testData");
@@ -235,7 +233,7 @@ describe("Mod4 Cars Local Api Tests", () => {
       cy.request({
         method: "DELETE",
         failOnStatusCode: false,
-        url: `http://localhost:8080/cars${id}`,
+        url: `http://localhost:8080/cars/${id}`,
       }).as("details");
       // Step 7  assert that the status code of delete is 200
       cy.get("@details").its("status").should("eq", 200);
@@ -245,8 +243,8 @@ describe("Mod4 Cars Local Api Tests", () => {
 
       cy.get("@details").then((response) => {
         cy.wrap(JSON.stringify(response.body))
-          .should("not.include", "Citroen")
-          .should("not.include", "DS5");
+          .should("not.include", "Volvo")
+          .should("not.include", "XC60");
 
         cy.log("Del Test Data succesfull.");
       });
