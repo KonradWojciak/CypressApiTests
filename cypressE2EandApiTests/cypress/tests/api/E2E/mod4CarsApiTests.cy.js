@@ -176,7 +176,7 @@ describe("Mod4 Cars Local Api Tests", () => {
         .should("include", randomModel);
     });
 
-    cy.log("New elements includ in the response body");
+    cy.log("New elements includes in the response body");
   });
 
   /// POST  WRONG END POINT
