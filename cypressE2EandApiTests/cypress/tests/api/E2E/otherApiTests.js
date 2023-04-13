@@ -59,3 +59,13 @@ describe("Test for POST method ", () => {
     });
   });
 });
+// TOTAL DURATINON hook
+// After install mocha
+
+// log the total test duration
+//afterEach(() => {
+//cy.window().then(win => {
+//   const mocha = win.Mocha;
+//   const totalDuration = mocha && mocha.getRunner() && mocha.getRunner().stats ? mocha.getRunner().stats.duration : 0;
+//   cy.log(`Total test duration: ${totalDuration} ms`);
+// });
