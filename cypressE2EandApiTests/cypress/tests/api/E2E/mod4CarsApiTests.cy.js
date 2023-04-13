@@ -10,7 +10,7 @@ describe("Mod4 Cars Local Api Tests", () => {
       method: "GET",
       url: "http://localhost:8080/cars",
       qs: {
-        key: "value",
+        key: "Key",
       },
     }).as("details");
     cy.log("Request was sent");
@@ -20,7 +20,7 @@ describe("Mod4 Cars Local Api Tests", () => {
     cy.log("Request status is correct");
 
     // Step 3: assert correct key value
-    cy.get("@details").its("body.args.key").should("eq", "value");
+    cy.get("@details").its("body.args.key").should("eq", "Key");
     cy.log("Body has correct key value");
   });
 
