@@ -18,7 +18,7 @@ describe("Mod4 httpbin.org Api Tests", () => {
     cy.get("@details").its("body.args.key").should("eq", "value");
     cy.log("Body has correct key value");
   });
-  // GET correct work   Tests
+  /// GET correct work   Tests
   it("Correct work with method GET", () => {
     // Step 1: send GET request to endpoint
     cy.request({
@@ -38,7 +38,7 @@ describe("Mod4 httpbin.org Api Tests", () => {
       cy.log("Response was: " + JSON.stringify(response.body));
     });
   });
-  ///// GET DURATION tests
+  /// GET DURATION tests
   it("Duration GET request test", () => {
     // Step 1: send GET request to endpoint
     cy.request({
@@ -202,91 +202,95 @@ describe("Mod4 httpbin.org Api Tests", () => {
       cy.log("PATCH request works correct");
     });
   });
-});
-/// DELETE work tests
-it("Check DELETE method  with new Body Data ", () => {
-  let id;
-  //SET-UP
-  // Step 1 send GET request to endpoint
-  cy.request({
-    method: "POST",
-    url: "https://httpbin.org/anything",
-    body: {
-      manufacturer: "Volvo",
-      model: "XC60",
-    },
-    failOnStatusCode: false,
-  }).as("testData");
-  cy.log("POST request was sent correctly");
-  // Step 2 assert that the  status code is 200
-  cy.get("@testData").its("status").should("eq", 200);
-  cy.log("New Body Data was sent ");
-  // Step 3 assert id for new body element
-  cy.get("@testData").then((response) => {
-    const id = response.body.length;
-    cy.log("New element was created with id =" + id);
-    Cypress.env("id", id);
-  });
-  cy.log("Delete Set UP Data created correctly.");
-  // DELATEING
-  // Step 5 assert Id for cypress enviroment
-  cy.then(() => {
-    const id = Cypress.env("id");
-    // Step 6  send delete request to endpoint
+  /// DELETE work tests
+  it("Check DELETE method  with new Body Data ", () => {
+    let id;
+    //SET-UP
+    // Step 1 send GET request to endpoint
     cy.request({
-      method: "DELETE",
-      failOnStatusCode: false,
-      url: `https://httpbin.org/anything/${id}`,
-    }).as("details");
-    // Step 7  assert that the status code of delete is 200
-    cy.get("@details").its("status").should("eq", 200);
-    cy.log("Delete request was sent");
-    // Step 8 check for body is not include new element
-    cy.get("@details").then((response) => {
-      cy.wrap(JSON.stringify(response.body))
-        .should("not.include", "Volvo")
-        .should("not.include", "XC60");
-      cy.log("Del Test Data succesfull.");
-    });
-  });
-  ///COOKIES send test
-  it("Cookies send test ", () => {
-    // Step 1 send request to endpoint
-    cy.request({
-      method: "GET",
-      url: "https://httpbin.org/headers",
-      headers: {
-        Cookie: "cookieName=cookieValue",
+      method: "POST",
+      url: "https://httpbin.org/anything",
+      body: {
+        manufacturer: "Volvo",
+        model: "XC60",
       },
       failOnStatusCode: false,
-    }).as("details");
-    cy.log("Request with cookies was sent");
-    //Step 2 assert that the  status code is 200
-    cy.get("@details").its("status");
-    cy.log("Status code of request is correct");
-    // Step 3 assert that cookies send work correct
-    cy.get("@details").then((response) => {
-      assert.equal("cookieName=cookieValue", response.requestHeaders["Cookie"]);
-      cy.log("Cookies send work correct");
+    }).as("testData");
+    cy.log("POST request was sent correctly");
+    // Step 2 assert that the  status code is 200
+    cy.get("@testData").its("status").should("eq", 200);
+    cy.log("New Body Data was sent ");
+    // Step 3 assert id for new body element
+    cy.get("@testData").then((response) => {
+      const id = response.body.length;
+      cy.log("New element was created with id =" + id);
+      Cypress.env("id", id);
     });
-  });
-  it("Header set test ", () => {
-    // Step 1 send request to endpoint
-    cy.request({
-      method: "GET",
-      url: "https://httpbin.org/headers",
-      headers: {
-        customHeader: "customValue",
-      },
-      failOnStatusCode: false,
-    }).as("detials");
-    //Step 2 assert that the  status code is 200
-    cy.get("@details").its("status").should("eq", 200);
-    cy.log("Status code of request is correct");
-    // Step 3 assert that  hedder set work correct
-    cy.get("@details").then((response) => {
-      assert.equal("customValue", response.requestHeaders.customHeader);
-      cy.log("Header set work correctly");
+    cy.log("Delete Set UP Data created correctly.");
+    // DELATEING
+    // Step 5 assert Id for cypress enviroment
+    cy.then(() => {
+      const id = Cypress.env("id");
+      // Step 6  send delete request to endpoint
+      cy.request({
+        method: "DELETE",
+        failOnStatusCode: false,
+        url: `https://httpbin.org/anything/${id}`,
+      }).as("details");
+      // Step 7  assert that the status code of delete is 200
+      cy.get("@details").its("status").should("eq", 200);
+      cy.log("Delete request was sent");
+      // Step 8 check for body is not include new element
+      cy.get("@details").then((response) => {
+        cy.wrap(JSON.stringify(response.body))
+          .should("not.include", "Volvo")
+          .should("not.include", "XC60");
+        cy.log("Del Test Data succesfull.");
+      });
+    });
+    ///COOKIES send test
+    it.only("Cookies send test ", () => {
+      // Step 1 send request to endpoint
+      cy.request({
+        method: "GET",
+        url: "https://httpbin.org/headers",
+        headers: {
+          Cookie: "cookieName=cookieValue",
+        },
+        failOnStatusCode: false,
+      }).as("details");
+      cy.log("Request with cookies was sent");
+      //Step 2 assert that the  status code is 200
+      cy.get("@details").its("status");
+      cy.log("Status code of request is correct");
+      // Step 3 assert that cookies send work correct
+      cy.get("@details").then((response) => {
+        assert.equal(
+          "cookieName=cookieValue",
+          response.requestHeaders["Cookie"]
+        );
+        cy.log("Cookies send work correct");
+      });
+    });
+    /// HEADER set test
+    it("Header set test ", () => {
+      // Step 1 send request to endpoint
+      cy.request({
+        method: "GET",
+        url: "https://httpbin.org/headers",
+        headers: {
+          customHeader: "customValue",
+        },
+        failOnStatusCode: false,
+      }).as("detials");
+      //Step 2 assert that the  status code is 200
+      cy.get("@details").its("status").should("eq", 200);
+      cy.log("Status code of request is correct");
+      // Step 3 assert that  hedder set work correct
+      cy.get("@details").then((response) => {
+        assert.equal("customValue", response.requestHeaders.customHeader);
+        cy.log("Header set work correctly");
+      });
     });
   });
 });
