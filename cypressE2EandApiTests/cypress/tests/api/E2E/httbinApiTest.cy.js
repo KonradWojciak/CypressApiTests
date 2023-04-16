@@ -38,12 +38,12 @@ describe("Mod4 httpbin.org Api Tests", () => {
       cy.log("Response was: " + JSON.stringify(response.body));
     });
   });
-  ///// GET DURETION tests
-  it("Duretion request request test", () => {
+  ///// GET DURATION tests
+  it("Duration  request test", () => {
     // Step 1: send GET request to endpoint
     cy.request({
       method: "GET",
-      url: "https://httpbin.org/anything",
+      url: "https://httpbin.org/get",
     }).as("details");
     cy.log("Request was sent");
     // Step 2: assert that the status code is 200
@@ -53,14 +53,14 @@ describe("Mod4 httpbin.org Api Tests", () => {
     cy.get("@details").its("body").should("not.be.empty");
     cy.log("Response body is not empty");
     // Step 4: assert that the response body has a duration property
-    cy.get("@details").its("body").should("have.property", "duration");
-    cy.log("Response body has duration property");
+    cy.get("@details").should("have.property", "duration");
+    cy.log("Response has duration property");
     // Step 5: assert that the duration is a number
-    cy.get("@details").its("body.duration").should("be.a", "number");
+    cy.get("@details").its("duration").should("be.a", "number");
     cy.log("Duration is a number");
     // Step 6: log the duration value
     cy.get("@details").then((response) => {
-      const duration = response.body.duration;
+      const duration = response.duration;
       cy.log(`The duration value is ${duration}`);
     });
   });
@@ -69,7 +69,7 @@ describe("Mod4 httpbin.org Api Tests", () => {
     // Step 1: send GET request to endpoint
     cy.request({
       method: "GET",
-      url: "https://httpbin.org/duretion",
+      url: "https://httpbin.org/get",
     }).then((response) => {
       // Step 2 assert that the  status code is 200
       expect(response.status).to.eq(200);
@@ -251,7 +251,7 @@ it("corect work with DELETE method  with new Body Data ", () => {
   });
 });
 ///COOKIE send test
-it.only("test send cookie", () => {
+it("test send cookie", () => {
   // Step 1 send request to endpoint
   cy.request({
     method: "GET",
