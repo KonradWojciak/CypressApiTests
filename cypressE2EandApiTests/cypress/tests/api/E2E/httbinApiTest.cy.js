@@ -18,7 +18,68 @@ describe("Mod4 httpbin.org Api Tests", () => {
     cy.get("@details").its("body.args.key").should("eq", "value");
     cy.log("Body has correct key value");
   });
-  /// GET correct work   Tests
+  ///COOKIES send test
+  it("Cookies send test ", () => {
+    // Step 1 send request to endpoint
+    cy.request({
+      method: "GET",
+      url: "https://httpbin.org/headers",
+      headers: {
+        Cookie: "cookieName=cookieValue",
+      },
+      failOnStatusCode: false,
+    }).as("details");
+    cy.log("Request with cookies was sent");
+    //Step 2 assert that the  status code is 200
+    cy.get("@details").its("status");
+    cy.log("Status code of request is correct");
+    // Step 3 assert that cookies send work correct
+    cy.get("@details").then((response) => {
+      assert.equal("cookieName=cookieValue", response.requestHeaders["Cookie"]);
+      cy.log("Cookies send work correct");
+    });
+  });
+  /// HEADER set test
+  it("Header set test ", () => {
+    // Step 1 send request to endpoint
+    cy.request({
+      method: "GET",
+      url: "https://httpbin.org/headers",
+      headers: {
+        customHeader: "customValue",
+      },
+      failOnStatusCode: false,
+    }).as("details");
+    //Step 2 assert that the  status code is 200
+    cy.get("@details").its("status").should("eq", 200);
+    cy.log("Status code of request is correct");
+    // Step 3 assert that  hedder set work correct
+    cy.get("@details").then((response) => {
+      assert.equal("customValue", response.requestHeaders.customHeader);
+      cy.log("Header set work correctly");
+    });
+  });
+  ///USER-AGENT test set correctly
+  it("User-Agent set test", () => {
+    // Step 1 send request to endpoint
+    cy.request({
+      method: "GET",
+      url: "https://httpbin.org/headers",
+      headers: {
+        "user-agent": "My test user-agent",
+      },
+      failOnStatusCode: false,
+    }).as("details");
+    //Step 2 assert that the  status code is 200
+    cy.get("@details").its("status").should("eq", 200);
+    cy.log("Status code of request is correct");
+    cy.get("@details").then((response) => {
+      // Step 3 assert that  hedder set work correct
+      assert.equal("My test user-agent", response.requestHeaders["user-agent"]);
+      cy.log("User Agent set work correctly");
+    });
+  });
+  /// GET correct work   Test
   it("Correct work with method GET", () => {
     // Step 1: send GET request to endpoint
     cy.request({
@@ -38,7 +99,7 @@ describe("Mod4 httpbin.org Api Tests", () => {
       cy.log("Response was: " + JSON.stringify(response.body));
     });
   });
-  /// GET DURATION tests
+  /// GET duration test
   it("Duration GET request test", () => {
     // Step 1: send GET request to endpoint
     cy.request({
@@ -64,7 +125,7 @@ describe("Mod4 httpbin.org Api Tests", () => {
       cy.log(`The duration value is ${duration}`);
     });
   });
-  // maximum long duretion Time test
+  // Maximum long DURATION Time test
   it(" Duretion POST max difined time ", () => {
     // Step 1: send GET request to endpoint
     cy.request({
@@ -138,8 +199,8 @@ describe("Mod4 httpbin.org Api Tests", () => {
     });
     cy.log("New elements includes in the response body");
   });
-  /// POST  WRONG END POINT
-  it("Test for POST on wrong endpoint should return 405", () => {
+  /// POST  wrong end point test
+  it("Test for POST on wrong endpoint", () => {
     // Step 1: send POST request to wrong endpoint
     cy.request({
       method: "GET",
@@ -151,7 +212,7 @@ describe("Mod4 httpbin.org Api Tests", () => {
     cy.get("@details").its("status").should("eq", 405);
     cy.log("Correct status 405 after wrong request");
   });
-  /// check PATCH method
+  /// Check PATCH method
   it("PATCH change the name of Body element", () => {
     // Step 1: send POST request to endpoint to create an element
     cy.request({
@@ -246,50 +307,6 @@ describe("Mod4 httpbin.org Api Tests", () => {
           .should("not.include", "Volvo")
           .should("not.include", "XC60");
         cy.log("Del Test Data succesfull.");
-      });
-    });
-    ///COOKIES send test
-    it.only("Cookies send test ", () => {
-      // Step 1 send request to endpoint
-      cy.request({
-        method: "GET",
-        url: "https://httpbin.org/headers",
-        headers: {
-          Cookie: "cookieName=cookieValue",
-        },
-        failOnStatusCode: false,
-      }).as("details");
-      cy.log("Request with cookies was sent");
-      //Step 2 assert that the  status code is 200
-      cy.get("@details").its("status");
-      cy.log("Status code of request is correct");
-      // Step 3 assert that cookies send work correct
-      cy.get("@details").then((response) => {
-        assert.equal(
-          "cookieName=cookieValue",
-          response.requestHeaders["Cookie"]
-        );
-        cy.log("Cookies send work correct");
-      });
-    });
-    /// HEADER set test
-    it("Header set test ", () => {
-      // Step 1 send request to endpoint
-      cy.request({
-        method: "GET",
-        url: "https://httpbin.org/headers",
-        headers: {
-          customHeader: "customValue",
-        },
-        failOnStatusCode: false,
-      }).as("detials");
-      //Step 2 assert that the  status code is 200
-      cy.get("@details").its("status").should("eq", 200);
-      cy.log("Status code of request is correct");
-      // Step 3 assert that  hedder set work correct
-      cy.get("@details").then((response) => {
-        assert.equal("customValue", response.requestHeaders.customHeader);
-        cy.log("Header set work correctly");
       });
     });
   });
