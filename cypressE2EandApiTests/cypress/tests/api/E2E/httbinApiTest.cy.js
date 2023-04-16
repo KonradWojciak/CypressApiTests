@@ -19,7 +19,7 @@ describe("Mod4 httpbin.org Api Tests", () => {
     cy.log("Body has correct key value");
   });
   // GET correct work   Tests
-  it("correct work with method GET", () => {
+  it("Correct work with method GET", () => {
     // Step 1: send GET request to endpoint
     cy.request({
       method: "GET",
@@ -38,12 +38,12 @@ describe("Mod4 httpbin.org Api Tests", () => {
       cy.log("Response was: " + JSON.stringify(response.body));
     });
   });
-  // GET DURETION tests
-  it("should return request duration", () => {
+  ///// GET DURETION tests
+  it("Duretion request request test", () => {
     // Step 1: send GET request to endpoint
     cy.request({
       method: "GET",
-      url: "https://httpbin.org/duretion",
+      url: "https://httpbin.org/anything",
     }).as("details");
     cy.log("Request was sent");
     // Step 2: assert that the status code is 200
@@ -65,7 +65,7 @@ describe("Mod4 httpbin.org Api Tests", () => {
     });
   });
   // maximum long duretion Time test
-  it("should return response in less than 5000ms", () => {
+  it("should return response in less than 500ms", () => {
     // Step 1: send GET request to endpoint
     cy.request({
       method: "GET",
@@ -87,7 +87,7 @@ describe("Mod4 httpbin.org Api Tests", () => {
     // Step 1: send GET request to endpoint
     cy.request({
       method: "POST",
-      url: "https://httpbin.org/post/anything",
+      url: "https://httpbin.org/anything",
       body: {
         manufacturer: "Audi",
         model: "A3",
@@ -96,7 +96,7 @@ describe("Mod4 httpbin.org Api Tests", () => {
     }).as("details");
     cy.log("Request was sent");
     // Step 2 assert that the  status code is 200
-    cy.get("details").its("status").should("eq", 200);
+    cy.get("@details").its("status").should("eq", 200);
     cy.log("Request status is corect");
     // Step 3: assert that the response body is not empty
     cy.get("@details").its("body").should("not.be.empty");
@@ -117,7 +117,7 @@ describe("Mod4 httpbin.org Api Tests", () => {
     cy.request({
       method: "POST",
       failOnStatusCode: false,
-      url: "https://httpbin.org/post/anything",
+      url: "https://httpbin.org/anything",
       body: {
         "Nazwa elementu": randomName,
         "Szczegół elementu": randomModel,
@@ -143,7 +143,7 @@ describe("Mod4 httpbin.org Api Tests", () => {
     // Step 1: send POST request to wrong endpoint
     cy.request({
       method: "GET",
-      url: "https://httpbin.org/non-existing-url",
+      url: "https://httpbin.org/post",
       failOnStatusCode: false,
     }).as("details");
     cy.log("Request with wrong method was sent");
@@ -151,16 +151,16 @@ describe("Mod4 httpbin.org Api Tests", () => {
     cy.get("@details").its("status").should("eq", 405);
     cy.log("Correct status 405 after wrong request");
   });
-  /// check PUT method
-  it("should change the name of an element", () => {
+  /// check PATCH method
+  it("should change the name of new element", () => {
     // Step 1: send POST request to endpoint to create an element
     cy.request({
-      method: "PUT",
+      method: "POST",
       failOnStatusCode: false,
-      url: "https://httpbin.org/put/anything",
+      url: "https://httpbin.org/post",
       body: {
-        "Nazwa elementu": "Stołek",
-        "Szczegól elementu": "Zielony",
+        "Element Name": "Chair",
+        "Element Details": "Green",
       },
     }).as("response");
     cy.log("POST request was sent");
@@ -173,32 +173,33 @@ describe("Mod4 httpbin.org Api Tests", () => {
     // Step 4: assert that the body includes new elements
     cy.get("@response").then((response) => {
       cy.wrap(JSON.stringify(response.body))
-        .should("include", "Stołek")
-        .should("include", "Zielony");
+        .should("include", "Chair")
+        .should("include", "Green");
     });
-    // Step 5: send PUT request to update element
+    cy.log("POST request was sent");
+    // Step 5: send Patch request to update element
     cy.get("@response").then((response) => {
       const elementId = response.body.id;
       cy.request({
-        method: "PUT",
+        method: "PATCH",
         failOnStatusCode: false,
-        url: `https://httpbin.org/put/anything${elementId}`,
+        url: `https://httpbin.org/post/${elementId}`,
         body: {
-          "Nazwa elementu": "Krzesło",
+          "Element Name": "Stool",
         },
       }).as("putResponse");
-      cy.log("PUT request was sent");
+      cy.log("Patch request was sent");
     });
     // Step 6: assert that the status code of PUT request is 200
     cy.get("@putResponse").its("status").should("eq", 200);
-    cy.log("PUT request status is correct");
+    cy.log("Patch request status is correct");
     // Step 7: assert that the response body is not empty
     cy.get("@putResponse").its("body").should("not.be.empty");
-    cy.log("PUT response body is not empty");
+    cy.log("Patch response body is not empty");
     // Step 8: assert that the body includes the updated element name
     cy.get("@putResponse").then((response) => {
-      cy.wrap(JSON.stringify(response.body)).should("include", "Krzesło");
-      cy.log("PUT request works correct");
+      cy.wrap(JSON.stringify(response.body)).should("include", "Stool");
+      cy.log("PATCH request works correct");
     });
   });
 });
@@ -209,7 +210,7 @@ it("corect work with DELETE method  with new Body Data ", () => {
   // Step 1 send GET request to endpoint
   cy.request({
     method: "POST",
-    url: "https://httpbin.org/post/anything",
+    url: "https://httpbin.org/anything",
     body: {
       manufacturer: "Volvo",
       model: "XC60",
@@ -235,7 +236,7 @@ it("corect work with DELETE method  with new Body Data ", () => {
     cy.request({
       method: "DELETE",
       failOnStatusCode: false,
-      url: `https://httpbin.org/delete/anything${id}`,
+      url: `https://httpbin.org/anything/${id}`,
     }).as("details");
     // Step 7  assert that the status code of delete is 200
     cy.get("@details").its("status").should("eq", 200);
@@ -250,7 +251,7 @@ it("corect work with DELETE method  with new Body Data ", () => {
   });
 });
 ///COOKIE send test
-it("test send cookie", () => {
+it.only("test send cookie", () => {
   // Step 1 send request to endpoint
   cy.request({
     method: "GET",
