@@ -108,7 +108,7 @@ describe("Mod4 Cars Local Api Tests", () => {
       });
     });
 
-    /// POST  work tests
+    /// POST  hard data work test
 
     it("correct work with POST", () => {
       // Step 1: send GET request to endpoint
@@ -119,7 +119,9 @@ describe("Mod4 Cars Local Api Tests", () => {
           manufacturer: "Audi",
           model: "A3",
         },
+        failOnStatusCode: false,
       }).as("details");
+
       cy.log("Request was sent");
 
       // Step 2 assert that the  status code is 200
