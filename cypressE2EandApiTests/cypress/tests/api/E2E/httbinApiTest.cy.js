@@ -1,6 +1,6 @@
 describe("Mod4 httpbin.org Api Tests", () => {
   /// Key value Test
-  it("Key value Test response code should be 200", () => {
+  it(" GET Key value Test", () => {
     // Step 1: send GET request to endpoint
     cy.request({
       failOnStatusCode: false,
@@ -39,7 +39,7 @@ describe("Mod4 httpbin.org Api Tests", () => {
     });
   });
   ///// GET DURATION tests
-  it("Duration  request test", () => {
+  it("Duration GET request test", () => {
     // Step 1: send GET request to endpoint
     cy.request({
       method: "GET",
@@ -65,11 +65,11 @@ describe("Mod4 httpbin.org Api Tests", () => {
     });
   });
   // maximum long duretion Time test
-  it("should return response in less than 500ms", () => {
+  it(" Duretion POST max difined time ", () => {
     // Step 1: send GET request to endpoint
     cy.request({
-      method: "GET",
-      url: "https://httpbin.org/get",
+      method: "POST",
+      url: "https://httpbin.org/post",
     }).then((response) => {
       // Step 2 assert that the  status code is 200
       expect(response.status).to.eq(200);
@@ -83,7 +83,7 @@ describe("Mod4 httpbin.org Api Tests", () => {
     });
   });
   /// POST  hard data work test
-  it("correct work with POST", () => {
+  it("Correct work with POST", () => {
     // Step 1: send GET request to endpoint
     cy.request({
       method: "POST",
@@ -108,7 +108,7 @@ describe("Mod4 httpbin.org Api Tests", () => {
         .should("include", "A3");
     });
   });
-  it("correct POST with random data", () => {
+  it("Correct POST with random data", () => {
     //SET UP
     //Generate random data
     const randomName = Math.random().toString(36).substring(7);
@@ -117,7 +117,7 @@ describe("Mod4 httpbin.org Api Tests", () => {
     cy.request({
       method: "POST",
       failOnStatusCode: false,
-      url: "https://httpbin.org/anything",
+      url: "https://httpbin.org/post",
       body: {
         "Nazwa elementu": randomName,
         "Szczegół elementu": randomModel,
@@ -152,12 +152,12 @@ describe("Mod4 httpbin.org Api Tests", () => {
     cy.log("Correct status 405 after wrong request");
   });
   /// check PATCH method
-  it("should change the name of new element", () => {
+  it("PATCH change the name of Body element", () => {
     // Step 1: send POST request to endpoint to create an element
     cy.request({
       method: "POST",
       failOnStatusCode: false,
-      url: "https://httpbin.org/post",
+      url: "https://httpbin.org/anything",
       body: {
         "Element Name": "Chair",
         "Element Details": "Green",
@@ -183,14 +183,14 @@ describe("Mod4 httpbin.org Api Tests", () => {
       cy.request({
         method: "PATCH",
         failOnStatusCode: false,
-        url: `https://httpbin.org/post/${elementId}`,
+        url: `https://httpbin.org/anything/${elementId}`,
         body: {
           "Element Name": "Stool",
         },
       }).as("putResponse");
       cy.log("Patch request was sent");
     });
-    // Step 6: assert that the status code of PUT request is 200
+    // Step 6: assert that the status code of Patch request is 200
     cy.get("@putResponse").its("status").should("eq", 200);
     cy.log("Patch request status is correct");
     // Step 7: assert that the response body is not empty
@@ -204,7 +204,7 @@ describe("Mod4 httpbin.org Api Tests", () => {
   });
 });
 /// DELETE work tests
-it("corect work with DELETE method  with new Body Data ", () => {
+it("Check DELETE method  with new Body Data ", () => {
   let id;
   //SET-UP
   // Step 1 send GET request to endpoint
@@ -249,24 +249,44 @@ it("corect work with DELETE method  with new Body Data ", () => {
       cy.log("Del Test Data succesfull.");
     });
   });
-});
-///COOKIE send test
-it("test send cookie", () => {
-  // Step 1 send request to endpoint
-  cy.request({
-    method: "GET",
-    url: "https://httpbin.org/headers",
-    headers: {
-      Cookie: "cookieName=cookieValue",
-    },
-    failOnStatusCode: false,
-  }).as("details");
-  cy.log("Request with cookies was sent");
-  //Step 2 assert that the  status code is 200
-  cy.get("@details").its("status").should("eq", 200);
-  cy.log("Status code of request is correct");
-  cy.get("@details").then((response) => {
-    assert.equal("cookieName=cookieValue", response.requestHeaders["Cookie"]);
-    cy.log("Cookies send work correct");
+  ///COOKIES send test
+  it("Cookies send test ", () => {
+    // Step 1 send request to endpoint
+    cy.request({
+      method: "GET",
+      url: "https://httpbin.org/headers",
+      headers: {
+        Cookie: "cookieName=cookieValue",
+      },
+      failOnStatusCode: false,
+    }).as("details");
+    cy.log("Request with cookies was sent");
+    //Step 2 assert that the  status code is 200
+    cy.get("@details").its("status");
+    cy.log("Status code of request is correct");
+    // Step 3 assert that cookies send work correct
+    cy.get("@details").then((response) => {
+      assert.equal("cookieName=cookieValue", response.requestHeaders["Cookie"]);
+      cy.log("Cookies send work correct");
+    });
+  });
+  it("Header set test ", () => {
+    // Step 1 send request to endpoint
+    cy.request({
+      method: "GET",
+      url: "https://httpbin.org/headers",
+      headers: {
+        customHeader: "customValue",
+      },
+      failOnStatusCode: false,
+    }).as("detials");
+    //Step 2 assert that the  status code is 200
+    cy.get("@details").its("status").should("eq", 200);
+    cy.log("Status code of request is correct");
+    // Step 3 assert that  hedder set work correct
+    cy.get("@details").then((response) => {
+      assert.equal("customValue", response.requestHeaders.customHeader);
+      cy.log("Header set work correctly");
+    });
   });
 });
