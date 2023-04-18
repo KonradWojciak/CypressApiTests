@@ -12,4 +12,4 @@ describe("Nasz pierwszy blok testów", () => {
   });
 });
 
-/// zamkniecie subscribe cy.get(".css-nsuwo3).click();
+// zamkniecie subscribe cy.get(".css-nsuwo3).click();
