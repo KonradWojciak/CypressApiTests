@@ -5,9 +5,9 @@
     "passes": 0,
     "pending": 0,
     "failures": 1,
-    "start": "2023-04-19T20:08:32.425Z",
-    "end": "2023-04-19T20:09:12.068Z",
-    "duration": 39643,
+    "start": "2023-04-19T20:10:06.319Z",
+    "end": "2023-04-19T20:10:08.264Z",
+    "duration": 1945,
     "testsRegistered": 1,
     "passPercent": 0,
     "pendingPercent": 0,
@@ -18,41 +18,41 @@
   },
   "results": [
     {
-      "uuid": "1466b505-2fee-444e-9ef0-61817de6e99b",
+      "uuid": "016eb458-0447-4b3c-8fa0-1cafa2e9b882",
       "title": "",
-      "fullFile": "cypress\\tests\\e2e\\test\\test1.cy.js",
-      "file": "cypress\\tests\\e2e\\test\\test1.cy.js",
+      "fullFile": "cypress\\tests\\e2e\\test\\test2.cy.js",
+      "file": "cypress\\tests\\e2e\\test\\test2.cy.js",
       "beforeHooks": [],
       "afterHooks": [],
       "tests": [],
       "suites": [
         {
-          "uuid": "c0626a6e-df8d-40c6-a58b-f21a5a9a35fb",
-          "title": "Nasz pierwszy blok testów",
+          "uuid": "51b6f4e8-8873-4e87-8aaf-e7228435be20",
+          "title": "Test z wizytą w siedzibie LMS 2",
           "fullFile": "",
           "file": "",
           "beforeHooks": [],
           "afterHooks": [],
           "tests": [
             {
-              "title": "Test z wizytą w siedzibie LMS",
-              "fullTitle": "Nasz pierwszy blok testów Test z wizytą w siedzibie LMS",
+              "title": "To log out",
+              "fullTitle": "Test z wizytą w siedzibie LMS 2 To log out",
               "timedOut": null,
-              "duration": 32468,
+              "duration": 1427,
               "state": "failed",
               "speed": null,
               "pass": false,
               "fail": true,
               "pending": false,
               "context": null,
-              "code": "// cypress code\ncy.visit(\"https://www.edu.goit.global/account/login\");\ncy.get(\"#user_email\").click();\ncy.get(\"#user_email\").type(\"user888@gmail.com\");\ncy.get(\"#user_password\").type(\"1234567890\");\ncy.get(\".css-1jphuq5\").click();\ncy.get(\".css-7afvtf\").click();\ncy.get(\":nth-child(9) > .css-bve2vl\").click();",
+              "code": "cy.get(\".css-1jphuq5\").click();\ncy.get(\".css-7afvtf\").click();\ncy.get(\":nth-child(9) > .css-bve2vl\").click();",
               "err": {
-                "message": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `.css-7afvtf`, but never found it.",
-                "estack": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `.css-7afvtf`, but never found it.\n    at Context.eval (webpack:///./cypress/tests/e2e/test/test1.cy.js:10:7)",
+                "message": "TypeError: cy.login is not a function\n\nBecause this error occurred during a `before each` hook we are skipping the remaining tests in the current suite: `Test z wizytą w siedzibie L...`",
+                "estack": "TypeError: cy.login is not a function\n\nBecause this error occurred during a `before each` hook we are skipping the remaining tests in the current suite: `Test z wizytą w siedzibie L...`\n    at Context.eval (webpack:///./cypress/tests/e2e/test/test2.cy.js:6:7)",
                 "diff": null
               },
-              "uuid": "22c09981-e4b6-4589-9ac4-41713df704ad",
-              "parentUUID": "c0626a6e-df8d-40c6-a58b-f21a5a9a35fb",
+              "uuid": "3eba2229-be85-4314-ae31-62209be1cd42",
+              "parentUUID": "51b6f4e8-8873-4e87-8aaf-e7228435be20",
               "isHook": false,
               "skipped": false
             }
@@ -60,11 +60,11 @@
           "suites": [],
           "passes": [],
           "failures": [
-            "22c09981-e4b6-4589-9ac4-41713df704ad"
+            "3eba2229-be85-4314-ae31-62209be1cd42"
           ],
           "pending": [],
           "skipped": [],
-          "duration": 32468,
+          "duration": 1427,
           "root": false,
           "rootEmpty": false,
           "_timeout": 2000
