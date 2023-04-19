@@ -1,4 +1,4 @@
-describe("Mod4 httpbin.org Api Tests", () => {
+describe("Mod 4 httpbin.org Api Tests", () => {
   /// Key value Test
   it(" GET Key value Test", () => {
     // Step 1: send GET request to endpoint
